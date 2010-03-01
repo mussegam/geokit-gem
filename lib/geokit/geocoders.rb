@@ -138,9 +138,11 @@ module Geokit
       # Call the geocoder service using the timeout if configured.
       def self.call_geocoder_service(url)
         Timeout::timeout(Geokit::Geocoders::request_timeout) { return self.do_get(url) } if Geokit::Geocoders::request_timeout        
-        return self.do_get(url)
+        self.do_get(url)
       rescue TimeoutError
-        return nil  
+        return nil
+      rescue SocketError
+        return nil
       end
 
       # Not all geocoders can do reverse geocoding. So, unless the subclass explicitly overrides this method,
